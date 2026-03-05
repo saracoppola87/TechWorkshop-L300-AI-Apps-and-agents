@@ -1,4 +1,15 @@
 import os
+import sys
+
+# Fix sys.path: the local 'a2a' directory name conflicts with the pip-installed
+# 'a2a-sdk' package. Remove the parent directory (src/) from sys.path so that
+# 'import a2a' resolves to the pip package, not this local directory.
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_parent_dir = os.path.dirname(_script_dir)
+sys.path = [p for p in sys.path if p and os.path.abspath(p) != _parent_dir]
+if _script_dir not in sys.path:
+    sys.path.insert(0, _script_dir)
+
 import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
